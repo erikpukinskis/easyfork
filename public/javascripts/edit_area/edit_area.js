@@ -420,6 +420,10 @@
 				if(this.settings["change_callback"].length>0)
 					eval("parent."+this.settings["change_callback"]+"('"+ this.id +"');");
 				break;		
+			case "onkeypress":
+				if(this.settings["keypress_callback"].length>0)
+					eval("parent."+this.settings["keypress_callback"]+"('"+ this.id +"');");
+				break;		
 			case "EA_load":
 				if(this.settings["EA_load_callback"].length>0)
 					eval("parent."+this.settings["EA_load_callback"]+"('"+ this.id +"');");

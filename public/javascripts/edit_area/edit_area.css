@@ -21,7 +21,6 @@ body, html, table, form, textarea{
 	overflow-y: scroll;
 	position: relative;
 	clear: both;
-  background-image: url('/images/line_number_background.png');
 }
 
 #result.empty{

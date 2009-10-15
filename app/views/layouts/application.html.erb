@@ -7,6 +7,8 @@
   <title><%= yield :title or "Easy" %></title>
   <%= stylesheet_link_tag 'scaffold' %>
   <%= yield :stylesheets %>
+
+  <%= javascript_include_tag 'prototype' %>
   <%= yield :javascripts %>
 </head>
 <body>

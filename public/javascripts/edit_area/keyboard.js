@@ -3,6 +3,8 @@ var EA_keys = {8:"Retour arriere",9:"Tabulation",12:"Milieu (pave numerique)",13
 
 
 function keyDown(e){
+  editArea.execCommand("onkeypress");
+
 	if(!e){	// if IE
 		e=event;
 	}

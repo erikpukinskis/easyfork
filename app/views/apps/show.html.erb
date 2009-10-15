@@ -40,7 +40,51 @@
 		,language: "en"
 		,syntax: "ruby"	
     ,replace_tab_by_spaces: 2
+    ,keypress_callback: 'handle_change'
+    ,EA_init_callback: 'remember_code'
 	});
 
+  var last_saved_code = null;
+  function remember_code(id) {
+    last_saved_code = editAreaLoader.getValue('app_code')
+  }
+
+  function handle_change(id) {
+    schedule_or_delay_a_save();
+  }
+
+  var save_timeout = null;
+  function schedule_or_delay_a_save() {
+    if (save_timeout != null) {
+      clearTimeout(save_timeout);
+    }
+
+    save_timeout = setTimeout(save, 2000);
+  }
+
+  var saving;
+  var original_code = document.getElementById("app_code").value;
+  function save() {
+    if (saving) {
+      schedule_or_delay_a_save();
+    } else {
+      if (editAreaLoader.getValue('app_code') != last_saved_code) {
+        saving = true;
+        make_save_request();
+      }
+      clearTimeout(save_timeout);
+    }
+  }
+
+  function make_save_request() {
+     new Ajax.Request('/apps/<%= @app.id %>/files/app.rb', 
+      { 
+        method:'post',
+        onSuccess: function(transport) {
+          alert("win!");
+        },
+        onFailure: function() { alert("fail!"); }
+      });   
+  }
 </script>
 
