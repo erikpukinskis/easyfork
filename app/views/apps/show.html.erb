@@ -5,12 +5,13 @@
     <p>Deployed to <a href="<%= @app.uri %>"><%= @app.uri %></a></p>
   <% end %>
 
-  <% action = @app.new_record? ? "apps" : "/apps/#{@app.id}/files/app.rb" %>
-  <form method="post" action="<%= action %>">
-  <textarea name="code" id="code"><%= @app.code %></textarea>
+<% form_for(@app) do |f| %>
+  <%= f.error_messages %>
 
-  <p><input type="submit" value="Save & Deploy"></p>
-  </form>
+    <%= f.text_area :code %>
+
+  <p><%= f.submit "Create" %></p>
+<% end %>
 </div>
 
 <div id="sidebar">

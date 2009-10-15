@@ -44,6 +44,9 @@ class AppsController < ApplicationController
 
     respond_to do |format|
       if @app.save
+        @app.save_file('app.rb', params[:app][:code])
+        @app.save_sinatra_rackup
+        @app.deploy
         flash[:notice] = 'App was successfully created.'
         format.html { redirect_to(@app) }
         format.xml  { render :xml => @app, :status => :created, :location => @app }
