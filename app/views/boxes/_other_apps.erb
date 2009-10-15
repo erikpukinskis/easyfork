@@ -1,0 +1,12 @@
+<% if apps.length > 1 %>
+
+  <div id="other_apps" class="alert">
+    User's other apps:
+    <ol>
+      <% apps.each do |app| %>
+        <li><%= link_to app.to_s, url_for(app) %></li>
+      <% end %>
+    </ol>
+  </div>
+
+<% end %>

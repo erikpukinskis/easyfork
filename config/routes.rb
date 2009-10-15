@@ -1,5 +1,12 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :apps
+  map.resource :user_session
+  map.resource :signup, :controller => "users"
+  map.connect '/join', :controller => "users", :action => "new",  :conditions => { :method => :get }
+  map.connect '/join', :controller => "users", :action => "create",  :conditions => { :method => :post }
+  map.connect '/signin', :controller => "user_sessions", :action => "new"
+  map.connect '/signout', :controller => "user_sessions", :action => "destroy"
+  map.resources :users
 
   # The priority is based upon order of creation: first created -> highest priority.
 

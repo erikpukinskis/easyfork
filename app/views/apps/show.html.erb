@@ -1,4 +1,5 @@
-<% content_for :stylesheet_tags do %><%= stylesheet_link_tag 'edit_app' %><% end %>
+<% content_for :stylesheets do %><%= stylesheet_link_tag 'edit_app' %><% end %>
+<% content_for :javascripts do %><%= javascript_include_tag 'edit_area/edit_area_loader' %><% end %>
 
 <div id="main_column">
   <% unless @app.new_record? %>
@@ -8,12 +9,38 @@
 <% form_for(@app) do |f| %>
   <%= f.error_messages %>
 
+  <div id="editor_container">
     <%= f.text_area :code %>
+  </div>
 
-  <p><%= f.submit "Create" %></p>
+  <p><%= f.submit "Deploy" %></p>
 <% end %>
 </div>
 
 <div id="sidebar">
-  
+  <%= render :partial => "boxes/app_info" if signed_in? or @app.name %>
+
+  <%= render :partial => "boxes/authenticate" unless signed_in? %>
+
+  <%= render :partial => "boxes/app_name" unless @app.name %>
+
+  <% if @app.owner %>
+    <%= render :partial => "boxes/other_apps", :locals => {:apps => @app.owner.apps} %>
+  <% end %>
 </div>
+
+<script language="Javascript" type="text/javascript">
+	// initialisation
+	editAreaLoader.init({
+		id: "app_code"	// id of the textarea to transform		
+		,start_highlight: true	// if start with highlight
+		,allow_resize: "no"
+    ,toolbar: ""
+		,allow_toggle: false
+		,language: "en"
+		,syntax: "ruby"	
+    ,replace_tab_by_spaces: 2
+	});
+
+</script>
+

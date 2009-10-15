@@ -1,0 +1,9 @@
+<div id="app_name" class="alert">
+  <% form_for(@app) do |f| %>
+  <p>Your app needs a <%= f.label :name, 'name' %>!</p>
+
+    <%= f.text_field :name %>
+
+    <%= f.submit "Save" %>
+  <% end %>
+</div>

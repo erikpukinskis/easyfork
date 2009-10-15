@@ -1,5 +1,10 @@
 class App < ActiveRecord::Base
   attr_accessor :code
+  belongs_to :owner, :class_name => "User"
+
+  def to_s
+    name or "Untitled"
+  end
 
   def before_create
     response = Forkolator.post('/repos', {})

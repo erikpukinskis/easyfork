@@ -1,4 +1,56 @@
 #app_code {
   width: 500px;
-  height: 400px;
+  height: 300px;
+  visibility: hidden;
+}
+
+#editor_container {
+  background-color: #EEE;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  padding: 8px;
+  width: 506px;
+  height: 306px;
+  border-bottom: 1px solid #DDD;
+  border-right: 1px solid #DDD;
+}
+
+#main_column {
+  display: inline-block;
+  vertical-align: top;
+  width: 550px;
+}
+
+#sidebar {
+  display: inline-block;
+  vertical-align: top;
+  width: 200px;
+}
+
+.alert {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  color: white;
+  padding: 4px 10px;
+}
+
+.alert p {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+.alert input[type=text] {
+  width: 100%;
+}
+
+#authenticate.alert {
+  background-color: orange;
+}
+
+#app_name.alert {
+  background-color: green;
+}
+
+#app_info.alert {
+  background-color: teal;
 }

@@ -40,14 +40,19 @@ class AppsController < ApplicationController
   # POST /apps
   # POST /apps.xml
   def create
+    if signed_in?
+      params[:app][:owner_id] = current_user.id
+    end
     @app = App.new(params[:app])
 
     respond_to do |format|
       if @app.save
+        session[:orphan_apps] ||= []
+        session[:orphan_apps] << @app
         @app.save_file('app.rb', params[:app][:code])
         @app.save_sinatra_rackup
         @app.deploy
-        flash[:notice] = 'App was successfully created.'
+        
         format.html { redirect_to(@app) }
         format.xml  { render :xml => @app, :status => :created, :location => @app }
       else
@@ -64,7 +69,6 @@ class AppsController < ApplicationController
 
     respond_to do |format|
       if @app.update_attributes(params[:app])
-        flash[:notice] = 'App was successfully updated.'
         format.html { redirect_to(@app) }
         format.xml  { head :ok }
       else

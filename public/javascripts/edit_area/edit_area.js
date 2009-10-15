@@ -125,7 +125,9 @@
 		
 		// add plugins buttons in the toolbar
 		spans= parent.getChildren(_$("toolbar_1"), "span", "", "", "all", -1);
-		
+
+		_$("toolbar_1").style.display = "none";
+
 		for(var i=0; i<spans.length; i++){
 		
 			id=spans[i].id.replace(/tmp_tool_(.*)/, "$1");
