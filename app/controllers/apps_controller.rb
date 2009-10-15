@@ -27,7 +27,7 @@ class AppsController < ApplicationController
     @app = App.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :action => "show" }
       format.xml  { render :xml => @app }
     end
   end

@@ -1,6 +1,4 @@
-<% content_for :stylesheet_tags do 
-  stylesheet_link_tag 'edit_app'
-end %>
+<% content_for :stylesheet_tags do %><%= stylesheet_link_tag 'edit_app' %><% end %>
 
 <div id="main_column">
   <% unless @app.new_record? %>
@@ -9,9 +7,7 @@ end %>
 
   <% action = @app.new_record? ? "apps" : "/apps/#{@app.id}/files/app.rb" %>
   <form method="post" action="<%= action %>">
-  <textarea name="code" id="code">
-  <%= @app.code %>
-  </textarea>
+  <textarea name="code" id="code"><%= @app.code %></textarea>
 
   <p><input type="submit" value="Save & Deploy"></p>
   </form>
