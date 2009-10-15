@@ -1,5 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :apps
+  map.resources :apps do |app|
+    app.resources :files, :requirements => { :id => /.*/ }
+  end
   map.resource :user_session
   map.resource :signup, :controller => "users"
   map.connect '/join', :controller => "users", :action => "new",  :conditions => { :method => :get }

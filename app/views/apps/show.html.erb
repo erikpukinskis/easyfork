@@ -62,7 +62,7 @@
     save_timeout = setTimeout(save, 2000);
   }
 
-  var saving;
+  var saving = false;
   var original_code = document.getElementById("app_code").value;
   function save() {
     if (saving) {
@@ -79,9 +79,14 @@
   function make_save_request() {
      new Ajax.Request('/apps/<%= @app.id %>/files/app.rb', 
       { 
-        method:'post',
+        method:'put',
+        parameters: 
+          {
+            "authenticity_token":"<%= form_authenticity_token %>",
+            "app_code":editAreaLoader.getValue('app_code')
+          },
         onSuccess: function(transport) {
-          alert("win!");
+          saving = false;
         },
         onFailure: function() { alert("fail!"); }
       });   
