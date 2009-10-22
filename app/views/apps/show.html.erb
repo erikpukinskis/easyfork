@@ -6,10 +6,12 @@
     <p>Deployed to <a href="<%= @app.uri %>"><%= @app.uri %></a></p>
   <% end %>
 
+
 <% form_for(@app) do |f| %>
   <%= f.error_messages %>
 
   <div id="editor_container">
+    <div id="commit_slider"></div>
     <%= f.text_area :code %>
   </div>
 
@@ -88,9 +90,52 @@
           },
         onSuccess: function(transport) {
           saving = false;
+          add_microcommit();
         },
         onFailure: function() { alert("fail!"); }
       });   
   }
+
+  function add_microcommit() {
+
+  }
+
+  var loading = false;
+  var reload_when_finished = false;
+  var commit_index_to_load;
+  function load_commit(index) {
+    if (loading) {
+      reload_when_finished = true;
+      commit_index_to_load = index;
+    } else {
+      loading = true;
+      new Ajax.Request('/apps/<%= @app.id %>/commits/' + index, 
+        { 
+          method:'get',
+          onSuccess: function(transport) {
+            loading = false;
+            editAreaLoader.setValue('app_code', transport.responseText);
+            if (reload_when_finished) {
+              load_commit(commit_index_to_load);
+              reload_when_finished = false;
+            }
+          },
+          onFailure: function() { alert("fail!"); }
+        }); 
+    }
+  }
+
+  $j(document).ready(function(){
+    $j("#commit_slider").slider(
+      {
+        min: 0, 
+        max: <%= @app.commits.count-1 %>,
+        value: <%= @app.commits.count-1 %>,
+        slide: function(event, ui) {
+          load_commit(ui.value);
+        }
+      }
+    );
+  });
 </script>
 

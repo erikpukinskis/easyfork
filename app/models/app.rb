@@ -26,6 +26,14 @@ class App < ActiveRecord::Base
     @code ||= (Forkolator.get("/repos/#{identifier}/files/app.rb") if identifier)
   end
 
+  def commits
+    @commits ||= JSON.parse(Forkolator.get("/repos/#{identifier}/commits"))
+  end
+
+  def old_code(sha)
+    Forkolator.get("/repos/#{identifier}/trees/#{sha}/raw/app.rb")
+  end
+
   def save_sinatra_rackup
     save_file('config.ru', "  
       require 'app'

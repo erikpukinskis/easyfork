@@ -10,7 +10,7 @@
   -moz-border-radius: 4px;
   padding: 8px;
   width: 506px;
-  height: 306px;
+  height: 326px;
   border-bottom: 1px solid #DDD;
   border-right: 1px solid #DDD;
 }
@@ -54,3 +54,13 @@
 #app_info.alert {
   background-color: teal;
 }
+
+#commit_slider {
+  height: 10px;
+  margin-bottom: 8px;
+}
+
+#commit_slider .ui-slider-handle {
+  height: 18px;
+}
+
