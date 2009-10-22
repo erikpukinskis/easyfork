@@ -10,10 +10,21 @@
   -moz-border-radius: 4px;
   padding: 8px;
   width: 506px;
-  height: 326px;
   border-bottom: 1px solid #DDD;
   border-right: 1px solid #DDD;
 }
+#editor_condainer.with_slider { height: 326px; }
+#editor_condainer.without_slider { height: 306px; }
+
+#commit_slider {
+  height: 10px;
+  margin-bottom: 8px;
+}
+
+#commit_slider .ui-slider-handle {
+  height: 18px;
+}
+
 
 #main_column {
   display: inline-block;
@@ -53,14 +64,5 @@
 
 #app_info.alert {
   background-color: teal;
-}
-
-#commit_slider {
-  height: 10px;
-  margin-bottom: 8px;
-}
-
-#commit_slider .ui-slider-handle {
-  height: 18px;
 }
 

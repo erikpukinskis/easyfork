@@ -10,8 +10,14 @@
 <% form_for(@app) do |f| %>
   <%= f.error_messages %>
 
-  <div id="editor_container">
-    <div id="commit_slider"></div>
+  <div id="editor_container" class="<%= @app.new_record? ? 'without' : 'with' %>_slider">
+
+    <% unless @app.new_record? %>
+      <div id="commit_slider">
+        <!-- <img src="/images/star.png" onclick="alert('ho');" style="position: relative; left: 20px; top: -3px">-->
+      </div>
+    <% end %>
+
     <%= f.text_area :code %>
   </div>
 
@@ -19,17 +25,19 @@
 <% end %>
 </div>
 
-<div id="sidebar">
-  <%= render :partial => "boxes/app_info" if signed_in? or @app.name %>
+<% unless @app.new_record? %>
+  <div id="sidebar">
+    <%= render :partial => "boxes/app_info" if signed_in? or @app.name %>
 
-  <%= render :partial => "boxes/authenticate" unless signed_in? %>
+    <%= render :partial => "boxes/authenticate" unless signed_in? %>
 
-  <%= render :partial => "boxes/app_name" unless @app.name %>
+    <%= render :partial => "boxes/app_name" unless @app.name %>
 
-  <% if @app.owner %>
-    <%= render :partial => "boxes/other_apps", :locals => {:apps => @app.owner.apps} %>
-  <% end %>
-</div>
+    <% if @app.owner %>
+      <%= render :partial => "boxes/other_apps", :locals => {:apps => @app.owner.apps} %>
+    <% end %>
+  </div>
+<% end %> 
 
 <script language="Javascript" type="text/javascript">
 	// initialisation
@@ -126,6 +134,7 @@
     }
   }
 
+<% unless @app.new_record? %>
   $j(document).ready(function(){
     $j("#commit_slider").slider(
       {
@@ -138,6 +147,7 @@
       }
     );
   });
+<% end %>
 
   var editing = <%= @app.owner == current_user %>;
 </script>
