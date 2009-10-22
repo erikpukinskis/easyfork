@@ -71,6 +71,7 @@
       if (editAreaLoader.getValue('app_code') != last_saved_code) {
         saving = true;
         make_save_request();
+        last_saved_code = editAreaLoader.getValue('app_code');
       }
       clearTimeout(save_timeout);
     }
