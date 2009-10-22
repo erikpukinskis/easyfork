@@ -106,32 +106,33 @@
           },
         onSuccess: function(transport) {
           saving = false;
-          add_microcommit();
+          $j("#commit_slider").slider('option', 'max', transport.responseJSON.commit_count-1);
         },
         onFailure: function() { alert("fail!"); }
       });   
   }
 
-  function add_microcommit() {
-
-  }
-
   var loading = false;
   var reload_when_finished = false;
   var commit_index_to_load;
+  var revisions = new Array();
   function load_commit(index) {
     if (loading) {
       reload_when_finished = true;
       commit_index_to_load = index;
     } else {
+      if (revisions[index]) {
+        set_code(revisions[index]);
+        return;
+      }
       loading = true;
       new Ajax.Request('/apps/<%= @app.id %>/commits/' + index, 
         { 
           method:'get',
           onSuccess: function(transport) {
             loading = false;
-            editAreaLoader.setValue('app_code', '');
-            editAreaLoader.setValue('app_code', transport.responseText);
+            revisions[transport.responseJSON.index] = transport.responseJSON.text
+            set_code(transport.responseJSON.text);
             if (reload_when_finished) {
               load_commit(commit_index_to_load);
               reload_when_finished = false;
@@ -141,6 +142,13 @@
         }); 
     }
   }
+
+  function set_code(code) {
+    editAreaLoader.setValue('app_code', '');
+    editAreaLoader.setValue('app_code', code);
+    original_code = code
+  }
+
 
 <% unless @app.new_record? %>
   $j(document).ready(function(){
