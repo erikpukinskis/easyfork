@@ -52,6 +52,7 @@
   }
 
   function handle_change(id) {
+    if (!editing) return;
     schedule_or_delay_a_save();
   }
 
@@ -137,5 +138,7 @@
       }
     );
   });
+
+  var editing = <%= @app.owner == current_user %>;
 </script>
 

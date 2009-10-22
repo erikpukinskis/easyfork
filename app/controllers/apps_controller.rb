@@ -66,6 +66,7 @@ class AppsController < ApplicationController
   # PUT /apps/1.xml
   def update
     @app = App.find(params[:id])
+    require_owner(@app, current_user)
 
     respond_to do |format|
       if @app.update_attributes(params[:app])
@@ -82,11 +83,24 @@ class AppsController < ApplicationController
   # DELETE /apps/1.xml
   def destroy
     @app = App.find(params[:id])
+    require_owner(@app, current_user)
+
     @app.destroy
 
     respond_to do |format|
       format.html { redirect_to(apps_url) }
       format.xml  { head :ok }
     end
+  end
+
+  def fork
+    @app = App.find(params[:id])
+    @fork = @app.fork(current_user)
+
+    respond_to do |format|
+      format.html { redirect_to(@fork) }
+      format.xml  { head :ok }
+    end
+    
   end
 end

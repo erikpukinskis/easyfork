@@ -39,6 +39,10 @@ class ApplicationController < ActionController::Base
         return false
       end
     end
+
+    def require_owner(app, user)
+      raise "You're not the owner of that app!" unless app.owner == user
+    end
  
 #    def require_no_user
 #      if current_user

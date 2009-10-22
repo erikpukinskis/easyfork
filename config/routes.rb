@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :apps do |app|
+  map.resources :apps, :member => [:fork] do |app|
     app.resources :files, :requirements => { :id => /.*/ }
     app.resources :commits, :only => [:show]
   end

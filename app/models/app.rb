@@ -8,7 +8,7 @@ class App < ActiveRecord::Base
 
   def before_create
     response = Forkolator.post('/repos', {})
-    self.identifier = response['repo_id']
+    self.identifier = response['repo_id'] unless identifier
   end
 
   def save_file(filename, content)
@@ -32,6 +32,13 @@ class App < ActiveRecord::Base
 
   def old_code(sha)
     Forkolator.get("/repos/#{identifier}/trees/#{sha}/raw/app.rb")
+  end
+
+  def fork(user)
+    response = Forkolator.post("/repos/#{identifier}/fork", {})
+    app = App.create!(:owner_id => user.id, :identifier => response['repo_id'])
+debugger
+    app
   end
 
   def save_sinatra_rackup
