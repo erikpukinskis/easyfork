@@ -66,3 +66,26 @@
   background-color: teal;
 }
 
+
+
+
+.button {
+  font-size: 1.1em;
+  border: 1px solid #CCC;
+  background: url('/images/button_background.png');
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  padding: 4px 20px;
+  text-shadow: 1px 1px 1px #CCC;;
+  color: #222;
+  text-decoration: none;
+}
+
+.button:hover {
+  background: none;
+  background-color: #DDD;
+  color: #111;
+  text-shadow: 1px 1px 1px white;
+}
+
+

@@ -101,6 +101,15 @@ class AppsController < ApplicationController
       format.html { redirect_to(@fork) }
       format.xml  { head :ok }
     end
-    
+  end
+
+  def deploy
+    @app = App.find(params[:id])
+    @app.deploy
+
+    respond_to do |format|
+      format.html { redirect_to(@app) }
+      format.xml  { head :ok }
+    end
   end
 end

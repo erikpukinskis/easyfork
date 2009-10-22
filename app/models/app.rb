@@ -37,7 +37,6 @@ class App < ActiveRecord::Base
   def fork(user)
     response = Forkolator.post("/repos/#{identifier}/fork", {})
     app = App.create!(:owner_id => user.id, :identifier => response['repo_id'])
-debugger
     app
   end
 

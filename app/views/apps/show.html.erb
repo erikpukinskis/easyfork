@@ -1,43 +1,50 @@
 <% content_for :stylesheets do %><%= stylesheet_link_tag 'edit_app' %><% end %>
 <% content_for :javascripts do %><%= javascript_include_tag 'edit_area/edit_area_loader' %><% end %>
 
-<div id="main_column">
-  <% unless @app.new_record? %>
-    <p>Deployed to <a href="<%= @app.uri %>"><%= @app.uri %></a></p>
+
+
+
+  <div id="main_column">
+  <% form_for(@app) do |f| %>
+
+    <%= f.error_messages %>
+
+    <div id="editor_container" class="<%= @app.new_record? ? 'without' : 'with' %>_slider">
+
+      <% unless @app.new_record? %>
+        <div id="commit_slider">
+          <!-- <img src="/images/star.png" onclick="alert('ho');" style="position: relative; left: 20px; top: -3px">-->
+        </div>
+      <% end %>
+
+      <%= f.text_area :code %>
+    </div>
+
+    <% if @app.new_record? %>
+      <p><%= f.submit "Deploy", :class => "button" %></p>
+    <% end %>
+
   <% end %>
+  </div>
 
-
-<% form_for(@app) do |f| %>
-  <%= f.error_messages %>
-
-  <div id="editor_container" class="<%= @app.new_record? ? 'without' : 'with' %>_slider">
+  <div id="sidebar">
 
     <% unless @app.new_record? %>
-      <div id="commit_slider">
-        <!-- <img src="/images/star.png" onclick="alert('ho');" style="position: relative; left: 20px; top: -3px">-->
-      </div>
+      <%= render :partial => "boxes/app_info" if signed_in? or @app.name %>
+
+      <%= render :partial => "boxes/authenticate" unless signed_in? %>
+
+      <%= render :partial => "boxes/app_name" unless @app.name %>
+
+      <p>Deployed to <a href="<%= @app.uri %>"><%= @app.uri %></a></p>
+
+    <p><a class="button" href="/apps/<%= @app.id %>/fork" %>Fork this app</a></p>
+
+    <p><a class="button" href="/apps/<%= @app.id %>/deploy" %>Deploy</a></p>
     <% end %>
 
-    <%= f.text_area :code %>
   </div>
 
-  <p><%= f.submit "Deploy" %></p>
-<% end %>
-</div>
-
-<% unless @app.new_record? %>
-  <div id="sidebar">
-    <%= render :partial => "boxes/app_info" if signed_in? or @app.name %>
-
-    <%= render :partial => "boxes/authenticate" unless signed_in? %>
-
-    <%= render :partial => "boxes/app_name" unless @app.name %>
-
-    <% if @app.owner %>
-      <%= render :partial => "boxes/other_apps", :locals => {:apps => @app.owner.apps} %>
-    <% end %>
-  </div>
-<% end %> 
 
 <script language="Javascript" type="text/javascript">
 	// initialisation
@@ -123,6 +130,7 @@
           method:'get',
           onSuccess: function(transport) {
             loading = false;
+            editAreaLoader.setValue('app_code', '');
             editAreaLoader.setValue('app_code', transport.responseText);
             if (reload_when_finished) {
               load_commit(commit_index_to_load);
