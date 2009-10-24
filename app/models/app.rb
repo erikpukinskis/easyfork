@@ -30,6 +30,10 @@ class App < ActiveRecord::Base
     @commits ||= JSON.parse(Forkolator.get("/repos/#{identifier}/commits"))
   end
 
+  def do_commit(message)
+    Forkolator.post("/repos/#{identifier}/commits", {:message => message})
+  end
+
   def old_code(sha)
     Forkolator.get("/repos/#{identifier}/trees/#{sha}/raw/app.rb")
   end

@@ -9,10 +9,12 @@
 
     <%= f.error_messages %>
 
+    <div id="changes" class="off"></div>
     <div id="editor_container" class="<%= @app.new_record? ? 'without' : 'with' %>_slider">
 
       <% unless @app.new_record? %>
-        <div id="commit_slider">
+        <a id="save_button" class="button small off" href="javascript:save();">save</a>
+        <div id="commit_slider" class="without_changes">
           <!-- <img src="/images/star.png" onclick="alert('ho');" style="position: relative; left: 20px; top: -3px">-->
         </div>
       <% end %>
@@ -77,12 +79,12 @@
       clearTimeout(save_timeout);
     }
 
-    save_timeout = setTimeout(save, 2000);
+    save_timeout = setTimeout(autosave, 2000);
   }
 
   var saving = false;
   var original_code = document.getElementById("app_code").value;
-  function save() {
+  function autosave() {
     if (saving) {
       schedule_or_delay_a_save();
     } else {
@@ -149,6 +151,32 @@
     original_code = code
   }
 
+  var num_changes;
+  function set_num_changes(num) {
+    num_changes = num;
+    var changes = (num > 0)
+    $j("#commit_slider").toggleClass('with_changes', changes);
+    $j("#commit_slider").toggleClass('without_changes', !changes);
+    $j("#changes").html(num + " changes!");
+    $j("#changes").toggleClass('off', !changes);
+    $j("#save_button").toggleClass('off', !changes);
+  }
+
+  function save() {
+    var msg = prompt("What are you saving?");
+    new Ajax.Request('/apps/<%= @app.id %>/commits', 
+    { 
+      method:'post',
+      parameters: {
+        'message': msg,
+        'authenticity_token':'<%= form_authenticity_token %>'
+      },
+      onSuccess: function(transport) {
+        set_num_changes(0);
+      },
+      onFailure: function() { alert("fail!"); }
+    });   
+  }
 
 <% unless @app.new_record? %>
   $j(document).ready(function(){
@@ -166,5 +194,7 @@
 <% end %>
 
   var editing = <%= @app.owner == current_user %>;
+  set_num_changes(<%= @app.commits.count %>);
+
 </script>
 

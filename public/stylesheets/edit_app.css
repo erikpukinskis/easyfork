@@ -8,7 +8,7 @@
   background-color: #EEE;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  padding: 8px;
+  padding: 6px 8px 8px 8px;
   width: 506px;
   border-bottom: 1px solid #DDD;
   border-right: 1px solid #DDD;
@@ -16,13 +16,43 @@
 #editor_condainer.with_slider { height: 326px; }
 #editor_condainer.without_slider { height: 306px; }
 
+.off { display: none; }
+
 #commit_slider {
   height: 10px;
-  margin-bottom: 8px;
+  margin-top: 4px;
+  margin-bottom: 11px;
+  display: inline-block;
 }
 
 #commit_slider .ui-slider-handle {
   height: 18px;
+}
+
+#commit_slider.with_changes { width: 435px; }
+#commit_slider.without_changes { width: 100%; }
+
+a#save_button {
+  float: right;
+  margin-bottom: 2px;
+  margin-top: -1px;
+  margin-left: 15px;
+  width: 40px;
+  text-align: center;
+}
+
+#changes {
+  margin: 0 0 0 405px;
+  width: 100px;
+  text-align: center;
+  padding: 4px 4px 0 4px;
+  -webkit-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  color: #444;
+  font-size: 0.8em;
+  background-color: red;
+  color: white;
+  border-bottom: 2px solid #E00;
 }
 
 
@@ -91,5 +121,13 @@
   color: #111;
   text-shadow: 1px 1px 1px white;
 }
+
+.button.small {
+  font-size: 0.9em;
+  padding: 1px 5px;
+}
+
+
+
 
 
