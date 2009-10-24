@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091015043838) do
+ActiveRecord::Schema.define(:version => 20091024025842) do
 
   create_table "apps", :force => true do |t|
     t.string   "uri"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20091015043838) do
     t.string   "name"
     t.integer  "owner_id"
     t.string   "session_id"
+    t.string   "autosave_repo_id"
   end
 
   create_table "users", :force => true do |t|

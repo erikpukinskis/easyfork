@@ -51,6 +51,7 @@ class AppsController < ApplicationController
         session[:orphan_apps] << @app
         @app.save_file('app.rb', params[:app][:code])
         @app.save_sinatra_rackup
+        @app.do_commit("initial commit")
         @app.deploy
         
         format.html { redirect_to(@app) }

@@ -1,3 +1,5 @@
+require 'json'
+
 class App < ActiveRecord::Base
   attr_accessor :code
   belongs_to :owner, :class_name => "User"
@@ -7,12 +9,16 @@ class App < ActiveRecord::Base
   end
 
   def before_create
-    response = Forkolator.post('/repos', {})
-    self.identifier = response['repo_id'] unless identifier
+    repo = Forkolator.post('/repos', {})
+    self.identifier = repo['repo_id'] unless identifier
+    autosave_repo = Forkolator.post('/repos', {})
+    self.autosave_repo_id = autosave_repo['repo_id']
   end
 
   def save_file(filename, content)
     Forkolator.post("/repos/#{identifier}/files/#{filename}", {:content => content})
+    Forkolator.post("/repos/#{autosave_repo_id}/files/#{filename}", {:content => content})
+    Forkolator.post("/repos/#{autosave_repo_id}/commits", {:message => "autosaved #{filename}"})
   end
 
   def deploy
@@ -23,11 +29,15 @@ class App < ActiveRecord::Base
   end
 
   def getcode
-    @code ||= (Forkolator.get("/repos/#{identifier}/files/app.rb") if identifier)
+    @code ||= (Forkolator.get("/repos/#{autosave_repo_id}/files/app.rb") if autosave_repo_id)
   end
 
   def commits
-    @commits ||= JSON.parse(Forkolator.get("/repos/#{identifier}/commits"))
+    @commits ||= if autosave_repo_id
+      JSON.parse(Forkolator.get("/repos/#{autosave_repo_id}/commits"))
+    else
+      []
+    end
   end
 
   def do_commit(message)
@@ -35,7 +45,7 @@ class App < ActiveRecord::Base
   end
 
   def old_code(sha)
-    Forkolator.get("/repos/#{identifier}/trees/#{sha}/raw/app.rb")
+    Forkolator.get("/repos/#{autosave_repo_id}/trees/#{sha}/raw/app.rb")
   end
 
   def fork(user)
