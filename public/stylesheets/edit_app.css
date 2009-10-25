@@ -30,7 +30,7 @@
 }
 
 #commit_slider.with_changes { width: 435px; }
-#commit_slider.without_changes { width: 470px; }
+#commit_slider.without_changes { width: 493px; }
 
 a#save_button {
   float: right;

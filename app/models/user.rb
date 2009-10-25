@@ -11,6 +11,6 @@ class User < ActiveRecord::Base
   end
 
   def adopt(orphans)
-    orphans.each {|orphan| apps << orphan}
+    orphans.each {|orphan| apps << App.find_by_id(orphan)}
   end
 end

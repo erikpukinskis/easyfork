@@ -18,7 +18,6 @@ class App < ActiveRecord::Base
   def save_file(filename, content)
     Forkolator.post("/repos/#{identifier}/files/#{filename}", {:content => content})
     Forkolator.post("/repos/#{autosave_repo_id}/files/#{filename}", {:content => content})
-    Forkolator.post("/repos/#{autosave_repo_id}/commits", {:message => "autosaved #{filename}"})
   end
 
   def deploy
@@ -59,6 +58,7 @@ class App < ActiveRecord::Base
     (1..all.count-1).each do |i|
       if all[i]['real_full']
         all[i-1]["full"] = true
+        all[i-1]["message"] = all[i]["message"]
       end
     end
 
@@ -75,6 +75,10 @@ class App < ActiveRecord::Base
 
   def do_commit(message)
     Forkolator.post("/repos/#{identifier}/commits", {:message => message})
+  end
+
+  def autosave_commit(message)
+    Forkolator.post("/repos/#{autosave_repo_id}/commits", {:message => message})
   end
 
   def old_code(sha)

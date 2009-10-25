@@ -48,9 +48,10 @@ class AppsController < ApplicationController
     respond_to do |format|
       if @app.save
         session[:orphan_apps] ||= []
-        session[:orphan_apps] << @app
+        session[:orphan_apps] << @app.id
         @app.save_file('app.rb', params[:app][:code])
         @app.save_sinatra_rackup
+        @app.autosave_commit("initial autosave")
         @app.do_commit("initial commit")
         @app.deploy
         

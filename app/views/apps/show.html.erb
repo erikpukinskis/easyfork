@@ -106,8 +106,9 @@
           },
         onSuccess: function(transport) {
           saving = false;
-          set_slider_size(transport.responseJSON.commit_count-1);
           set_num_changes(transport.responseJSON.changes_since_last_full_commit);
+          set_stars(transport.responseJSON.commits);
+          set_slider_size(transport.responseJSON.commit_count-1);
         },
         onFailure: function() { alert("fail!"); }
       });   
@@ -148,12 +149,14 @@
     editAreaLoader.setValue('app_code', '');
     editAreaLoader.setValue('app_code', code);
     original_code = code
+    remember_code();
   }
 
   var num_changes;
+  var changes;
   function set_num_changes(num) {
     num_changes = num;
-    var changes = (num > 0)
+    changes = (num > 0)
     $j("#commit_slider").toggleClass('with_changes', changes);
     $j("#commit_slider").toggleClass('without_changes', !changes);
     $j("#changes").html(num + " changes!");
@@ -176,18 +179,22 @@
       },
       onSuccess: function(transport) {
         set_num_changes(0);
+        set_stars(transport.responseJSON.commits);
       },
       onFailure: function() { alert("fail!"); }
     });   
   }
 
-  function set_stars(total_changes, commits) {
+  function set_stars(commits) {
+    $j("#commit_stars").html('');
     for(var i=0; i<commits.length; i++) {
       if (commits[i].full) {
-        left = i * 330.0 / total_changes;
+        width = changes ? 438.0 : 495.0;
+        left = i / (commits.length-1) * width - 3;
         $j("#commit_stars").html($j("#commit_stars").html() 
           + '<img src="/images/star.png" onclick="" style="position: relative; left: ' 
-          + left + 'px; top: -3px">');
+          + left + 'px; top: -3px; margin-right: -16px;" alt="' + commits[i]['message'] + '" '
+          + '>');
       }
     }
   }
@@ -199,7 +206,7 @@
       onSuccess: function(transport) {
         set_num_changes(transport.responseJSON.changes_since_last_full_commit);
         set_slider_size(transport.responseJSON.total_changes-1);
-        set_stars(transport.responseJSON.total_changes, transport.responseJSON.commits);
+        set_stars(transport.responseJSON.commits);
       },
       onFailure: function() { alert("fail!"); }
     });

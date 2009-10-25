@@ -8,7 +8,7 @@ class CommitsController < ApplicationController
   def create
     app = App.find_by_id(params[:app_id])
     app.do_commit(params['message'])
-    render :json => {'status' => 'ok'}
+    render :json => {'status' => 'ok', :commits => app.commits_hash}
   end
 
   def index
