@@ -48,6 +48,23 @@ class App < ActiveRecord::Base
     end
   end
 
+  def commits_hash
+    full = commits.map do |commit| 
+      commit['real_full'] = true
+      commit
+    end
+    all = full + autosaves
+    all = all.sort {|a,b| a['date'] <=> b['date']}
+
+    (1..all.count-1).each do |i|
+      if all[i]['real_full']
+        all[i-1]["full"] = true
+      end
+    end
+
+    all.delete_if {|commit| commit['real_full']}
+  end
+
   def changes_since_last_full_commit
     last_commit = commits.max {|a,b| a['date'] <=> b['date']}
     autosaves.inject([]) do |all,commit| 

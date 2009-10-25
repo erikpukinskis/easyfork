@@ -13,8 +13,8 @@
   border-bottom: 1px solid #DDD;
   border-right: 1px solid #DDD;
 }
-#editor_condainer.with_slider { height: 326px; }
-#editor_condainer.without_slider { height: 306px; }
+#editor_container.with_slider { height: 326px; }
+#editor_container.without_slider { height: 306px; }
 
 .off { display: none; }
 
@@ -30,7 +30,7 @@
 }
 
 #commit_slider.with_changes { width: 435px; }
-#commit_slider.without_changes { width: 100%; }
+#commit_slider.without_changes { width: 470px; }
 
 a#save_button {
   float: right;

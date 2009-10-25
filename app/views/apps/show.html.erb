@@ -14,9 +14,7 @@
 
       <% unless @app.new_record? %>
         <a id="save_button" class="button small off" href="javascript:save();">save</a>
-        <div id="commit_slider" class="without_changes">
-          <!-- <img src="/images/star.png" onclick="alert('ho');" style="position: relative; left: 20px; top: -3px">-->
-        </div>
+        <div id="commit_slider" class="without_changes"><div id="commit_stars"></div></div>
       <% end %>
 
       <%= f.text_area :code %>
@@ -183,6 +181,17 @@
     });   
   }
 
+  function set_stars(total_changes, commits) {
+    for(var i=0; i<commits.length; i++) {
+      if (commits[i].full) {
+        left = i * 330.0 / total_changes;
+        $j("#commit_stars").html($j("#commit_stars").html() 
+          + '<img src="/images/star.png" onclick="" style="position: relative; left: ' 
+          + left + 'px; top: -3px">');
+      }
+    }
+  }
+
   function initialize_slider() {
     new Ajax.Request('/apps/<%= @app.id %>/commits', 
     { 
@@ -190,6 +199,7 @@
       onSuccess: function(transport) {
         set_num_changes(transport.responseJSON.changes_since_last_full_commit);
         set_slider_size(transport.responseJSON.total_changes-1);
+        set_stars(transport.responseJSON.total_changes, transport.responseJSON.commits);
       },
       onFailure: function() { alert("fail!"); }
     });
@@ -209,10 +219,11 @@
       }
     );
   });
+
+  initialize_slider();
 <% end %>
 
   var editing = <%= @app.owner == current_user %>;
-  initialize_slider();
 
 </script>
 

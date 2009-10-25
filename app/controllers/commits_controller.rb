@@ -14,6 +14,6 @@ class CommitsController < ApplicationController
   def index
     app = App.find_by_id(params[:app_id])
     render :json => {:changes_since_last_full_commit => app.changes_since_last_full_commit.length,
-      :total_changes => app.autosaves.length }
+      :total_changes => app.autosaves.length, :commits => app.commits_hash}
   end
 end
