@@ -108,7 +108,8 @@
           },
         onSuccess: function(transport) {
           saving = false;
-          $j("#commit_slider").slider('option', 'max', transport.responseJSON.commit_count-1);
+          set_slider_size(transport.responseJSON.commit_count-1);
+          set_num_changes(transport.responseJSON.changes_since_last_full_commit);
         },
         onFailure: function() { alert("fail!"); }
       });   
@@ -162,6 +163,10 @@
     $j("#save_button").toggleClass('off', !changes);
   }
 
+  function set_slider_size(num) {
+    $j("#commit_slider").slider('option', 'max', num);
+  }
+
   function save() {
     var msg = prompt("What are you saving?");
     new Ajax.Request('/apps/<%= @app.id %>/commits', 
@@ -178,7 +183,20 @@
     });   
   }
 
+  function initialize_slider() {
+    new Ajax.Request('/apps/<%= @app.id %>/commits', 
+    { 
+      method:'get',
+      onSuccess: function(transport) {
+        set_num_changes(transport.responseJSON.changes_since_last_full_commit);
+        set_slider_size(transport.responseJSON.total_changes-1);
+      },
+      onFailure: function() { alert("fail!"); }
+    });
+  }
+
 <% unless @app.new_record? %>
+
   $j(document).ready(function(){
     $j("#commit_slider").slider(
       {
@@ -194,7 +212,7 @@
 <% end %>
 
   var editing = <%= @app.owner == current_user %>;
-  set_num_changes(<%= @app.commits.count %>);
+  initialize_slider();
 
 </script>
 

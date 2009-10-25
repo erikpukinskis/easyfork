@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :apps, :member => [:fork, :deploy] do |app|
     app.resources :files, :requirements => { :id => /.*/ }
-    app.resources :commits, :only => [:show, :create]
+    app.resources :commits, :only => [:show, :create, :index]
   end
   map.resource :user_session
   map.resource :signup, :controller => "users"

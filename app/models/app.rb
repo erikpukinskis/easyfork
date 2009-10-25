@@ -33,10 +33,26 @@ class App < ActiveRecord::Base
   end
 
   def commits
-    @commits ||= if autosave_repo_id
+    @commits ||= if identifier
+      JSON.parse(Forkolator.get("/repos/#{identifier}/commits"))
+    else
+      []
+    end
+  end
+
+  def autosaves
+    @autosaves ||= if autosave_repo_id
       JSON.parse(Forkolator.get("/repos/#{autosave_repo_id}/commits"))
     else
       []
+    end
+  end
+
+  def changes_since_last_full_commit
+    last_commit = commits.max {|a,b| a['date'] <=> b['date']}
+    autosaves.inject([]) do |all,commit| 
+      all << commit if commit['date'] > last_commit['date']
+      all
     end
   end
 
