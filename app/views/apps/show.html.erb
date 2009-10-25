@@ -14,7 +14,10 @@
 
       <% unless @app.new_record? %>
         <a id="save_button" class="button small off" href="javascript:save();">save</a>
-        <div id="commit_slider" class="without_changes"><div id="commit_stars"></div></div>
+        <div id="commit_slider" class="without_changes">
+          <div id="commit_bubble"></div>
+          <div id="commit_stars"></div>
+        </div>
       <% end %>
 
       <%= f.text_area :code %>
@@ -194,9 +197,20 @@
         $j("#commit_stars").html($j("#commit_stars").html() 
           + '<img src="/images/star.png" onclick="" style="position: relative; left: ' 
           + left + 'px; top: -3px; margin-right: -16px;" alt="' + commits[i]['message'] + '" '
-          + '>');
+          + " onmouseover=\"show_commit('" + commits[i]['message'] + "', '" + left + "');\" "
+          + " onmouseout=\"hide_commit();\">");
       }
     }
+  }
+
+  function show_commit(message, left) {
+    $("commit_bubble").style.left = (left-5) + 'px';
+    $j("#commit_bubble").html(message);
+    $("commit_bubble").style.display = "block";
+  }
+
+  function hide_commit() {
+    $("commit_bubble").style.display = "none";
   }
 
   function initialize_slider() {

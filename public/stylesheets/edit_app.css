@@ -55,6 +55,19 @@ a#save_button {
   border-bottom: 2px solid #E00;
 }
 
+#commit_bubble {
+  position: absolute;
+  background-color: #FFFF99;
+  font-size: 0.8em;
+  color: #444;
+  border: 1px solid #FFCC33;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 2px 4px;
+  top: -30px;
+  display: none;
+}
+
 
 #main_column {
   display: inline-block;
