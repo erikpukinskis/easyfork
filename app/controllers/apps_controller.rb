@@ -13,7 +13,7 @@ class AppsController < ApplicationController
   # GET /apps/1
   # GET /apps/1.xml
   def show
-    @app = App.find(params[:id])
+    @app = App.find_by_name(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -44,7 +44,7 @@ class AppsController < ApplicationController
       params[:app][:owner_id] = current_user.id
     end
     @app = App.new(params[:app])
-
+    debugger
     respond_to do |format|
       if @app.save
         session[:orphan_apps] ||= []
@@ -55,7 +55,7 @@ class AppsController < ApplicationController
         @app.do_commit("initial commit")
         @app.deploy
         
-        format.html { redirect_to(@app) }
+        format.html { redirect_to(app_path(@app.owner, @app)) }
         format.xml  { render :xml => @app, :status => :created, :location => @app }
       else
         format.html { render :action => "new" }

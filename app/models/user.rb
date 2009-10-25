@@ -13,4 +13,8 @@ class User < ActiveRecord::Base
   def adopt(orphans)
     orphans.each {|orphan| apps << App.find_by_id(orphan)}
   end
+
+  def to_param
+    login
+  end
 end

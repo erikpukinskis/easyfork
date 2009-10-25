@@ -3,9 +3,25 @@ require 'json'
 class App < ActiveRecord::Base
   attr_accessor :code
   belongs_to :owner, :class_name => "User"
+  before_create :set_name
 
   def to_s
     name or "Untitled"
+  end
+
+  def to_param
+    name
+  end
+
+  def next_name
+    last = App.find(:first, :conditions => "name LIKE 'untitled-%'", :order => "created_at DESC")
+    return "untitled-1" unless last
+    /untitled-[0-9]*/
+  end
+
+  def set_name
+    return if name
+    name = next_name
   end
 
   def before_create

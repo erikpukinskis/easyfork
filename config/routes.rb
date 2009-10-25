@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.root :controller => "apps", :action => "new"
+
   map.resources :apps, :member => [:fork, :deploy] do |app|
     app.resources :files, :requirements => { :id => /.*/ }
     app.resources :commits, :only => [:show, :create, :index]
@@ -10,6 +12,10 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/signin', :controller => "user_sessions", :action => "new"
   map.connect '/signout', :controller => "user_sessions", :action => "destroy"
   map.resources :users
+
+  map.user ':id', :controller => "users", :action => "my_method"
+  #map.user ':id', :controller => "users", :action => "show"
+  #map.app ':owner_id/:id', :controller => "apps", :action => "show"
 
   # The priority is based upon order of creation: first created -> highest priority.
 
@@ -43,7 +49,6 @@ ActionController::Routing::Routes.draw do |map|
   #   end
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  map.root :controller => "apps", :action => "new"
 
   # See how all your routes lay out with "rake routes"
 

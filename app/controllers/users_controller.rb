@@ -6,6 +6,10 @@ class UsersController < ApplicationController
     '/join'
   end
 
+  def my_method
+    params[:id]
+  end
+
   def new
     @user = User.new
   end
