@@ -1,0 +1,13 @@
+<h1>While your app is loading...</h1>
+
+<% form_for(@app) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    Why not give it a <%= f.label :name %>?<br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>

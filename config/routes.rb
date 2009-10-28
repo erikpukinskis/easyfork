@@ -13,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   #map.resources :users
 
   #map.apps '/apps', :controller => "apps", :action => "create", :conditions => { :method => :post }
-  map.resource :apps
+  map.resources :apps, :member => [:name]
   map.connect ':login', :controller => "users", :action => "show"
   map.connect ':owner_id/:name', :controller => "apps", :action => "show"
   map.connect ':owner_id/:name/fork', :controller => "apps", :action => "fork"

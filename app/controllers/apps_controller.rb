@@ -11,7 +11,11 @@ class AppsController < ApplicationController
   end
 
   def find
-    App.basic_find(params['owner_id'], params['name'])
+    if params['owner_id'] and params['name']
+      App.basic_find(params['owner_id'], params['name'])
+    else
+      App.find_by_id(params[:id])
+    end
   end
 
   # GET /apps/1
@@ -41,12 +45,16 @@ class AppsController < ApplicationController
     @app = App.find(params[:id])
   end
 
+  def name
+    @app = find
+  end
+
   # POST /apps
   # POST /apps.xml
   def create
-#    if signed_in?
-#      params[:app][:owner_id] = current_user.id
-#    end
+    if signed_in?
+      params[:app][:owner_id] = current_user.id
+    end
     @app = App.new(params[:app])
     respond_to do |format|
       if @app.save
@@ -57,7 +65,13 @@ class AppsController < ApplicationController
         @app.do_commit("initial commit")
         @app.deploy
         
-        format.html { redirect_to(join_path) }
+        format.html do
+          if signed_in?
+            redirect_to app_path(@app, "name")
+          else 
+            redirect_to join_path
+          end
+        end
         format.xml  { render :xml => @app, :status => :created, :location => @app }
       else
         format.html { render :action => "new" }
@@ -74,7 +88,7 @@ class AppsController < ApplicationController
 
     respond_to do |format|
       if @app.update_attributes(params[:app])
-        format.html { redirect_to(@app) }
+        format.html { redirect_to app_path(@app) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
