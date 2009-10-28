@@ -5,3 +5,7 @@
 <% @user.apps.each do |app| %>
   <li><%= link_to app.to_s, app_path(app) %></li>
 <% end %>
+
+<% @user.stories.each do |story| %>
+  <p><%= story.body %></p>
+<% end %>

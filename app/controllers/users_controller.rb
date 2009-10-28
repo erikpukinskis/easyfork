@@ -25,6 +25,7 @@ class UsersController < ApplicationController
       @user.save
       @app.owner = @user
       @app.save
+      @user.add_story("created a new app, #{app_link(@app)}")
       redirect_to app_path(@app)
     else
       render :action => :new

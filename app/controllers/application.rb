@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   # from your application log (in this case, all fields with names like "password"). 
   # filter_parameter_logging :password
 
-  helper_method :current_user_session, :current_user, :signed_in?, :app_path
+  helper_method :current_user_session, :current_user, :signed_in?, :app_path, :app_link
   filter_parameter_logging :password, :password_confirmation
 
   private
@@ -25,6 +25,10 @@ class ApplicationController < ActionController::Base
       end
       base <<= "/" + action if action
       base
+    end
+
+    def app_link(app) 
+      "<a href=\"#{app_path(app)}\">#{app}</a>"
     end
 
     ["commits", "fork", "deploy"].each do |action|

@@ -8,6 +8,7 @@ class CommitsController < ApplicationController
   def create
     app = App.basic_find(params[:owner_id], params[:name])
     app.do_commit(params['message'])
+    app.owner.add_story("saved \"#{params['message']}\" to #{app_link(app)}")
     render :json => {'status' => 'ok', :commits => app.commits_hash}
   end
 
