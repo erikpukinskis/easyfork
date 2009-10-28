@@ -27,6 +27,8 @@
       <a href="/<%= current_user.login %>">Home</a> |
       <a href="/apps/new">New app</a> |
       <a href="/signout">Sign out</a>
+    <% else %>
+      <a href="/signin">Sign in</a>
     <% end %>
   </div>
 

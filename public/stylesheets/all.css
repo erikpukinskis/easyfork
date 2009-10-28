@@ -3,9 +3,13 @@ body {
 }
 
 #top_bar {
+  width: 800px;
+  margin: 0 auto;
   background-color: #555;
   border-bottom: 1px solid #333;
   padding: 4px 10px;
+  -moz-border-radius: 0 0 4px 4px;
+  -webkit-border-radius: 0 0 4px 4px;
 }
 
 #top_bar, #top_bar a {
@@ -24,3 +28,4 @@ body {
   width: 800px;
   margin: 0 auto;
 }
+

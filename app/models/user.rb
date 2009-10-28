@@ -20,6 +20,6 @@ class User < ActiveRecord::Base
   end
 
   def add_story(text)
-    stories << Story.new(:body => text)
+    stories << Story.new(:body => text, :date => Time.now)
   end
 end

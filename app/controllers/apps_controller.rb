@@ -84,10 +84,12 @@ class AppsController < ApplicationController
   # PUT /apps/1.xml
   def update
     @app = App.find(params[:id])
+    bare = @app.name == nil and params[:name]
     require_owner(@app, current_user)
 
     respond_to do |format|
       if @app.update_attributes(params[:app])
+        @app.owner.add_story("created a new app, #{app_link(@app)}")
         format.html { redirect_to app_path(@app) }
         format.xml  { head :ok }
       else

@@ -35,17 +35,14 @@
     <% unless @app.new_record? %>
       <%= render :partial => "boxes/app_info" if signed_in? or @app.name %>
 
-      <%= render :partial => "boxes/authenticate" unless signed_in? %>
-
-      <%= render :partial => "boxes/app_name" unless @app.name %>
-
       <p>Deployed to <a href="<%= @app.uri %>"><%= @app.uri %></a></p>
 
-    <%= "locked" unless @app.owner == current_user %>
-
-    <p><a class="button" href="<%= app_fork_path(@app) %>" %>Fork this app</a></p>
-
-    <p><a class="button" href="<%= app_deploy_path(@app) %>" %>Deploy</a></p>
+      <% if @app.owner == current_user %>
+        <p><a class="button" href="<%= app_deploy_path(@app) %>" %>Deploy</a></p>
+      <% else %>
+        <p><a class="button" href="<%= app_fork_path(@app) %>" %>Fork this app</a></p>
+      <% end %>     
+ 
     <% end %>
 
   </div>
@@ -162,9 +159,10 @@
   function set_num_changes(num) {
     num_changes = num;
     changes = (num > 0)
+    label = (num > 1) ? "changes" : "change"
     $j("#commit_slider").toggleClass('with_changes', changes);
     $j("#commit_slider").toggleClass('without_changes', !changes);
-    $j("#changes").html(num + " changes!");
+    $j("#changes").html(num + " " + label + "!");
     $j("#changes").toggleClass('off', !changes);
     $j("#save_button").toggleClass('off', !changes);
   }
