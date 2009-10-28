@@ -10,10 +10,14 @@ class AppsController < ApplicationController
     end
   end
 
+  def find
+    App.basic_find(params['owner_id'], params['name'])
+  end
+
   # GET /apps/1
   # GET /apps/1.xml
   def show
-    @app = App.find_by_name(params[:id])
+    @app = find
 
     respond_to do |format|
       format.html # show.html.erb
@@ -40,22 +44,20 @@ class AppsController < ApplicationController
   # POST /apps
   # POST /apps.xml
   def create
-    if signed_in?
-      params[:app][:owner_id] = current_user.id
-    end
+#    if signed_in?
+#      params[:app][:owner_id] = current_user.id
+#    end
     @app = App.new(params[:app])
-    debugger
     respond_to do |format|
       if @app.save
-        session[:orphan_apps] ||= []
-        session[:orphan_apps] << @app.id
+        session[:orphan_app_id] = @app.id
         @app.save_file('app.rb', params[:app][:code])
         @app.save_sinatra_rackup
         @app.autosave_commit("initial autosave")
         @app.do_commit("initial commit")
         @app.deploy
         
-        format.html { redirect_to(app_path(@app.owner, @app)) }
+        format.html { redirect_to(join_path) }
         format.xml  { render :xml => @app, :status => :created, :location => @app }
       else
         format.html { render :action => "new" }
@@ -96,21 +98,21 @@ class AppsController < ApplicationController
   end
 
   def fork
-    @app = App.find(params[:id])
+    @app = find
     @fork = @app.fork(current_user)
 
     respond_to do |format|
-      format.html { redirect_to(@fork) }
+      format.html { redirect_to app_path(@fork) }
       format.xml  { head :ok }
     end
   end
 
   def deploy
-    @app = App.find(params[:id])
+    @app = find
     @app.deploy
 
     respond_to do |format|
-      format.html { redirect_to(@app) }
+      format.html { redirect_to app_path(@app) }
       format.xml  { head :ok }
     end
   end

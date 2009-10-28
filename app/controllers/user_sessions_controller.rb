@@ -13,10 +13,6 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = UserSession.new(params[:user_session])
     if @user_session.save
-      if session[:orphan_apps]
-        current_user.adopt(session[:orphan_apps]) 
-        session[:orphan_apps] = []
-      end
       redirect_back_or_default '/'
     else
       render :action => :new

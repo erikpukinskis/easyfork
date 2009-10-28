@@ -13,10 +13,27 @@ class ApplicationController < ActionController::Base
   # from your application log (in this case, all fields with names like "password"). 
   # filter_parameter_logging :password
 
-  helper_method :current_user_session, :current_user, :signed_in?
+  helper_method :current_user_session, :current_user, :signed_in?, :app_path
   filter_parameter_logging :password, :password_confirmation
 
   private
+    def app_path(app, action = nil)
+      if app.owner and app.name
+        base = "/#{app.owner.login}/#{app.name}"
+      else
+        base = "/apps/#{app.id}"
+      end
+      base <<= "/" + action if action
+      base
+    end
+
+    ["commits", "fork", "deploy"].each do |action|
+      define_method :"app_#{action}_path" do |app|
+        app_path(app, action)
+      end
+      helper_method :"app_#{action}_path"
+    end
+
     def signed_in?
       !!current_user
     end

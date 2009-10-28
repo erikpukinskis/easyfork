@@ -1,7 +1,21 @@
-<h1>Register</h1>
- 
+<h1>While things start up, why not...</h1>
+
 <% form_for @user, :url => '/join' do |f| %>
-  <%= f.error_messages %>
-  <%= render :partial => "form", :object => f %>
-  <%= f.submit "Register" %>
+  <%= error_messages_for :object => [@user, @app] %>
+
+  <% fields_for @app do |a| %>
+    <p><%= a.label :name, "Give your app a name" %><br />
+    <%= a.text_field :name, {} %></p>
+  <% end %>
+
+  <%= f.label :login, "Choose your username" %><br />
+  <%= f.text_field :login %><br />
+  <br />
+  <%= f.label :password, "Pick a password" %><br />
+  <%= f.password_field :password %><br />
+  <br />
+  <%= f.label :email, "Give us your email" %><br />
+  <%= f.text_field :email %><br />
+
+  <%= f.submit "Sign in" %>
 <% end %>

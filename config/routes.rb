@@ -1,19 +1,27 @@
 ActionController::Routing::Routes.draw do |map|
   map.root :controller => "apps", :action => "new"
 
-  map.resources :apps, :member => [:fork, :deploy] do |app|
-    app.resources :files, :requirements => { :id => /.*/ }
-    app.resources :commits, :only => [:show, :create, :index]
-  end
+  #map.resources :apps, :member => [:fork, :deploy] do |app|
+  #  app.resources :files, :requirements => { :id => /.*/ }
+  #  app.resources :commits, :only => [:show, :create, :index]
+  #end
   map.resource :user_session
-  map.resource :signup, :controller => "users"
-  map.connect '/join', :controller => "users", :action => "new",  :conditions => { :method => :get }
+  map.join '/join', :controller => "users", :action => "new",  :conditions => { :method => :get }
   map.connect '/join', :controller => "users", :action => "create",  :conditions => { :method => :post }
   map.connect '/signin', :controller => "user_sessions", :action => "new"
   map.connect '/signout', :controller => "user_sessions", :action => "destroy"
-  map.resources :users
+  #map.resources :users
 
-  map.user ':id', :controller => "users", :action => "my_method"
+  #map.apps '/apps', :controller => "apps", :action => "create", :conditions => { :method => :post }
+  map.resource :apps
+  map.connect ':login', :controller => "users", :action => "show"
+  map.connect ':owner_id/:name', :controller => "apps", :action => "show"
+  map.connect ':owner_id/:name/fork', :controller => "apps", :action => "fork"
+  map.connect ':owner_id/:name/deploy', :controller => "apps", :action => "deploy"
+  map.connect ':owner_id/:name/commits', :controller => "commits", :action => "index", :conditions => { :method => :get }
+  map.connect ':owner_id/:name/commits', :controller => "commits", :action => "create", :conditions => { :method => :post }
+  map.connect ':owner_id/:name/commits/:index', :controller => "commits", :action => "show"
+  map.connect ':owner_id/:name/files/:filename', :controller => "files", :action => "update", :conditions => { :method => :put }, :requirements => { :filename => /.*/ }
   #map.user ':id', :controller => "users", :action => "show"
   #map.app ':owner_id/:id', :controller => "apps", :action => "show"
 

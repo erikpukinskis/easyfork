@@ -1,9 +1,15 @@
 require 'json'
 
 class App < ActiveRecord::Base
-  attr_accessor :code
+  attr_accessor :code, :should_validate_name
   belongs_to :owner, :class_name => "User"
-  before_create :set_name
+
+  validates_format_of :name, 
+    :with => /^[a-z]/, :message => "needs to start with a letter",
+    :if => :should_validate_name
+  validates_format_of :name, 
+    :with => /^[a-zA-Z0-9\-_]*$/, :message => "can only be letters, numbers, underscores (_) and dashes (-)",
+    :if => :should_validate_name
 
   def to_s
     name or "Untitled"
@@ -13,15 +19,9 @@ class App < ActiveRecord::Base
     name
   end
 
-  def next_name
-    last = App.find(:first, :conditions => "name LIKE 'untitled-%'", :order => "created_at DESC")
-    return "untitled-1" unless last
-    /untitled-[0-9]*/
-  end
-
-  def set_name
-    return if name
-    name = next_name
+  def App.basic_find(login, name)
+    user = User.find_by_login(login)
+    App.find(:first, :conditions => ["owner_id = ? AND name = ?", user.id, name])
   end
 
   def before_create

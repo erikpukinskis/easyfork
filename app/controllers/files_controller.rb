@@ -1,9 +1,9 @@
 class FilesController < ApplicationController
   def update
-    app = App.find_by_id(params[:app_id])
+    app = App.basic_find(params[:owner_id], params[:name])
     require_owner(app, current_user)
-    app.save_file(params[:id], params[:app_code])
-    app.autosave_commit("autosaved #{params[:id]}")
+    app.save_file(params[:filename], params[:app_code])
+    app.autosave_commit("autosaved #{params[:filename]}")
     render :json => {:status => :ok, :num_commits => app.commits.count,
       :changes_since_last_full_commit => app.changes_since_last_full_commit.count,
       :commits => app.commits_hash}

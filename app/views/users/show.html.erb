@@ -3,5 +3,5 @@
 <h2>Apps</h2>
 
 <% @user.apps.each do |app| %>
-  <li><%= link_to app.to_s, app_path(app.owner, app) %></li>
+  <li><%= link_to app.to_s, app_path(app) %></li>
 <% end %>

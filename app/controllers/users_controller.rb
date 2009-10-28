@@ -12,20 +12,27 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    @app = App.find_by_id(session[:orphan_app_id])
   end
   
   def create
     @user = User.new(params[:user])
-    if @user.save
-      flash[:notice] = "Account registered!"
-      redirect_back_or_default '/'
+    @app = App.find_by_id(session[:orphan_app_id])
+    @app.name = params['app']['name']
+    @app.should_validate_name = true
+    @user.valid?
+    if @app.valid? and @user.valid?
+      @user.save
+      @app.owner = @user
+      @app.save
+      redirect_to app_path(@app)
     else
       render :action => :new
     end
   end
   
   def show
-    @user = @current_user
+    @user = User.find_by_login(params[:login]) or raise ActiveRecord::RecordNotFound
   end
 
   def edit
