@@ -1,0 +1,26 @@
+body {
+  margin: 0;
+}
+
+#top_bar {
+  background-color: #555;
+  border-bottom: 1px solid #333;
+  padding: 4px 10px;
+}
+
+#top_bar, #top_bar a {
+  color: white;
+}
+
+#top_bar img {
+  vertical-align: -20%;
+}
+
+#account_stuff {
+  float: right;
+}
+
+#page {
+  width: 800px;
+  margin: 0 auto;
+}

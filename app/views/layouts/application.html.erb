@@ -6,6 +6,7 @@
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <title><%= yield :title or "Easy" %></title>
   <%= stylesheet_link_tag 'scaffold' %>
+  <%= stylesheet_link_tag 'all' %>
   <%= stylesheet_link_tag 'jquery/css/ui-lightness/jquery-ui.css' %>
   <%= yield :stylesheets %>
 
@@ -20,9 +21,22 @@
 </head>
 <body>
 
+<div id="top_bar">
+  <div id="account_stuff">
+    <% if signed_in? %>
+      <a href="/<%= current_user.login %>">Home</a> |
+      <a href="/apps/new">New app</a> |
+      <a href="/signout">Sign out</a>
+    <% end %>
+  </div>
+
+  <img src="/images/icon_20x20.png"> Forkolator
+</div>
 <p style="color: green"><%= flash[:notice] %></p>
 
-<%= yield  %>
+  <div id="page">
+    <%= yield  %>
+  </div>
 
 </body>
 </html>
