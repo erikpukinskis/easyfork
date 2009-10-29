@@ -71,7 +71,7 @@ class App < ActiveRecord::Base
     all = full + autosaves
     all = all.sort {|a,b| a['date'] <=> b['date']}
 
-    (1..all.count-1).each do |i|
+    (1..all.length-1).each do |i|
       if all[i]['real_full']
         all[i-1]["full"] = true
         all[i-1]["message"] = all[i]["message"]

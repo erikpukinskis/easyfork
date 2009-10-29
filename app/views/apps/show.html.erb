@@ -232,8 +232,8 @@
     $j("#commit_slider").slider(
       {
         min: 0, 
-        max: <%= @app.commits.count-1 %>,
-        value: <%= @app.commits.count-1 %>,
+        max: <%= @app.commits.length-1 %>,
+        value: <%= @app.commits.length-1 %>,
         slide: function(event, ui) {
           load_commit(ui.value);
         }
