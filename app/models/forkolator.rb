@@ -2,7 +2,7 @@ require 'restclient'
 require 'json'
 
 class Forkolator
-  @base = "http://localhost:3001"#"http://ec2-67-202-60-46.compute-1.amazonaws.com"
+  @base = ENV['forkserver'] or "http://localhost:3001"
 
   def Forkolator.post(path, params)
     text = RestClient.post("#{@base}#{path}", params)
