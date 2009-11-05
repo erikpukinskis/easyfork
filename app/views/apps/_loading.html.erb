@@ -1,0 +1,40 @@
+<div id="loading">
+  Your app is <span id="status">loading... <img src="/images/spinner.gif"></span>
+</div>
+
+<script type="text/javascript">
+<!--
+
+var redirect = false;
+function spin_until_loaded(redir) {
+  if (redir != null) {
+    redirect = redir;
+  }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+  new Ajax.Request('<%= app_path(@app) %>.json', 
+    { 
+      method:'get',
+      onSuccess: function(transport) {
+        if (transport.responseJSON.app.uri) {
+          stop_spinning();
+          if (redirect) {
+            do_redirect();
+          }
+        } else {
+          setTimeout(spin_until_loaded, 3000  );
+        }
+      },
+      onFailure: function() { alert("fail!"); }
+    });
+}
+
+function stop_spinning() {
+  $j('#status').html("loaded.");
+}
+
+function do_redirect() {
+ window.location = "<%= app_path(@app) %>";
+}
+
+
+-->
+</script>

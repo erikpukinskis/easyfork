@@ -97,6 +97,11 @@ class App < ActiveRecord::Base
     Forkolator.post("/repos/#{autosave_repo_id}/commits", {:message => message})
   end
 
+  def check_for_uri
+    response = Forkolator.get_json("/repos/#{identifier}")
+    update_attributes(:uri => response["uri"]) if response["uri"]
+  end
+
   def old_code(sha)
     Forkolator.get("/repos/#{autosave_repo_id}/trees/#{sha}/raw/app.rb")
   end

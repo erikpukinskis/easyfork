@@ -1,3 +1,13 @@
+<%= render :partial => "apps/loading" %>
+
+<script type="text/javascript">
+<!--
+$j(document).ready(function(){
+  spin_until_loaded(false);
+});
+-->
+</script>
+
 <h1>While your app is loading...</h1>
 
 <% form_for(@app) do |f| %>

@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :invites
+
   map.root :controller => "apps", :action => "new"
 
   #map.resources :apps, :member => [:fork, :deploy] do |app|
@@ -15,9 +17,12 @@ ActionController::Routing::Routes.draw do |map|
   #map.apps '/apps', :controller => "apps", :action => "create", :conditions => { :method => :post }
   map.resources :apps, :member => [:name]
   map.connect ':login', :controller => "users", :action => "show"
-  map.connect ':owner_id/:name', :controller => "apps", :action => "show"
+  map.connect ':owner_id/:name.:format', :controller => "apps", :action => "show"
+
   map.connect ':owner_id/:name/fork', :controller => "apps", :action => "fork"
+  map.connect ':owner_id/:name/loading', :controller => "apps", :action => "loading"
   map.connect ':owner_id/:name/deploy', :controller => "apps", :action => "deploy"
+
   map.connect ':owner_id/:name/commits', :controller => "commits", :action => "index", :conditions => { :method => :get }
   map.connect ':owner_id/:name/commits', :controller => "commits", :action => "create", :conditions => { :method => :post }
   map.connect ':owner_id/:name/commits/:index', :controller => "commits", :action => "show"

@@ -22,11 +22,21 @@ class AppsController < ApplicationController
   # GET /apps/1.xml
   def show
     @app = find
+    @app.check_for_uri unless @app.uri
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html do
+        redirect_to app_path(@app, "loading") unless @app.uri
+      end
       format.xml  { render :xml => @app }
+      format.json do
+        render :json => @app
+      end
     end
+  end
+
+  def loading
+    @app = find
   end
 
   # GET /apps/new

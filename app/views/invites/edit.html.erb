@@ -1,0 +1,16 @@
+<h1>Editing invite</h1>
+
+<% form_for(@invite) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :key %><br />
+    <%= f.text_field :key %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @invite %> |
+<%= link_to 'Back', invites_path %>
