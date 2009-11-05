@@ -34,7 +34,9 @@
 
   <img src="/images/icon_20x20.png"> <span id="logotype">Forkolator</span>
 </div>
-<p style="color: green"><%= flash[:notice] %></p>
+  <% if flash[:notice] %>
+    <div class="errors"><%= flash[:notice] %></div>
+  <% end %>
 
   <div id="page">
     <%= yield  %>

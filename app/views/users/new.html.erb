@@ -1,23 +1,32 @@
-<%= render :partial => "apps/loading" %>
+<% app = false %>
 
-<script type="text/javascript">
-<!--
-$j(document).ready(function(){
-  spin_until_loaded(false);
-});
--->
-</script>
+<% if app %>
+  <%= render :partial => "apps/loading" %>
 
-<h1>While things start up, why not...</h1>
+  <script type="text/javascript">
+  <!--
+  $j(document).ready(function(){
+    spin_until_loaded(false);
+  });
+  -->
+  </script>
+<% end %>
+
+<h1><%= "Get in on this" or "While things start up, why not..." %></h1>
 
 <% form_for @user, :url => '/join' do |f| %>
   <%= error_messages_for :object => [@user, @app] %>
 
+  <% if app %>
   <% fields_for @app do |a| %>
     <p><%= a.label :name, "Give your app a name" %><br />
     <%= a.text_field :name, {} %></p>
   <% end %>
+  <% end %>
 
+  <%= f.label :invite, "Enter your invite code" %><br />
+  <%= f.text_field :invite %><br />
+  <br />
   <%= f.label :login, "Choose your username" %><br />
   <%= f.text_field :login %><br />
   <br />

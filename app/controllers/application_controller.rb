@@ -61,6 +61,16 @@ class ApplicationController < ActionController::Base
       end
     end
 
+    def require_admin
+      return if require_user === false
+      unless current_user.admin?
+        store_location
+        flash[:notice] = "You must be an administrator in to access this page"
+        redirect_to new_user_session_url
+        return false
+      end
+    end
+
     def require_owner(app, user)
       raise "You're not the owner of that app!" unless app.owner == user
     end

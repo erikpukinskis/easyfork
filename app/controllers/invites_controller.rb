@@ -1,4 +1,6 @@
 class InvitesController < ApplicationController
+  before_filter :require_admin
+
   # GET /invites
   # GET /invites.xml
   def index

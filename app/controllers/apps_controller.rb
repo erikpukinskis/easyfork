@@ -1,4 +1,6 @@
 class AppsController < ApplicationController
+  before_filter :require_user, :except => [:show, :index]
+
   # GET /apps
   # GET /apps.xml
   def index

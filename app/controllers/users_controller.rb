@@ -17,16 +17,24 @@ class UsersController < ApplicationController
   
   def create
     @user = User.new(params[:user])
-    @app = App.find_by_id(session[:orphan_app_id])
-    @app.name = params['app']['name']
-    @app.should_validate_name = true
+    if params['app']
+      @app = App.find_by_id(session[:orphan_app_id])
+      @app.name = params['app']['name']
+      @app.should_validate_name = true
+    else
+      @app = App.new
+    end
     @user.valid?
-    if @app.valid? and @user.valid?
+    if (!@app or @app.valid?) and @user.valid?
       @user.save
-      @app.owner = @user
-      @app.save
-      @user.add_story("created a new app, #{app_link(@app)}")
-      redirect_to app_path(@app)
+      if params['app']
+        @app.owner = @user
+        @app.save
+        @user.add_story("created a new app, #{app_link(@app)}")
+        redirect_to app_path(@app)
+      else
+        redirect_to new_app_path
+      end
     else
       render :action => :new
     end
