@@ -1,0 +1,22 @@
+<h1>Listing invite_requests</h1>
+
+<table>
+  <tr>
+    <th>Email</th>
+    <th>Why</th>
+  </tr>
+
+<% @invite_requests.each do |invite_request| %>
+  <tr>
+    <td><%=h invite_request.email %></td>
+    <td><%=h invite_request.why %></td>
+    <td><%= link_to 'Show', invite_request %></td>
+    <td><%= link_to 'Edit', edit_invite_request_path(invite_request) %></td>
+    <td><%= link_to 'Destroy', invite_request, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New invite_request', new_invite_request_path %>

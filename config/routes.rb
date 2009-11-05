@@ -1,7 +1,10 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :invite_requests
+  map.connect '/thanks', :controller => "site", :action => "thanks"
+
   map.resources :invites
 
-  map.root :controller => "apps", :action => "new"
+  map.root :controller => "site", :action => "home"
 
   #map.resources :apps, :member => [:fork, :deploy] do |app|
   #  app.resources :files, :requirements => { :id => /.*/ }

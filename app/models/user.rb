@@ -2,12 +2,11 @@ class User < ActiveRecord::Base
   attr_accessor :session_id, :invite
   has_many :apps, :foreign_key => 'owner_id'
   has_many :stories
+  validate :invite_exists
 
   acts_as_authentic do |c|
     c.require_password_confirmation = false
   end
-
-  validate :invite_exists
 
   def invite_exists
     errors.add(:invite, "code isn't valid") unless Invite.find_by_key(invite)

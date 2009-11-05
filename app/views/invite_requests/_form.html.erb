@@ -1,0 +1,20 @@
+<h1>Interested?</h1>
+
+<p>Give us your email address and a quick reason why you want to use 
+Forkolator and we'll get you an invite.</p>
+
+<% form_for(@invite_request) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :email %><br />
+    <%= f.text_field :email %>
+  </p>
+  <p>
+    <%= f.label :why, "Why I want an invite" %><br />
+    <%= f.text_area :why %>
+  </p>
+  <p>
+    <%= f.submit 'Invite me!' %>
+  </p>
+<% end %>

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091105031429) do
+ActiveRecord::Schema.define(:version => 20091105072512) do
 
   create_table "apps", :force => true do |t|
     t.string   "uri"
@@ -20,6 +20,13 @@ ActiveRecord::Schema.define(:version => 20091105031429) do
     t.integer  "owner_id"
     t.string   "session_id"
     t.string   "autosave_repo_id"
+  end
+
+  create_table "invite_requests", :force => true do |t|
+    t.string   "email"
+    t.text     "why"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "invites", :force => true do |t|
