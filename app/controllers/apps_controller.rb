@@ -24,15 +24,15 @@ class AppsController < ApplicationController
   # GET /apps/1.xml
   def show
     @app = find
-    @app.check_for_uri unless @app.uri
+    @app.update_status
 
     respond_to do |format|
       format.html do
-        redirect_to app_path(@app, "loading") unless @app.uri
+        redirect_to app_path(@app, "loading") unless @app.status == "deployed"
       end
       format.xml  { render :xml => @app }
       format.json do
-        render :json => @app
+        render :json => {:app => {:status => @app.status}}
       end
     end
   end

@@ -1,7 +1,7 @@
 require 'json'
 
 class App < ActiveRecord::Base
-  attr_accessor :code, :should_validate_name
+  attr_accessor :code, :should_validate_name, :status
   belongs_to :owner, :class_name => "User"
 
   validates_format_of :name, 
@@ -37,10 +37,7 @@ class App < ActiveRecord::Base
   end
 
   def deploy
-    response = Forkolator.post("/repos/#{identifier}/deploy", {})
-    if response['uri']
-      update_attributes(:uri => response['uri'])
-    end
+    Forkolator.post("/repos/#{identifier}/deploy", {})
   end
 
   def getcode
@@ -97,9 +94,10 @@ class App < ActiveRecord::Base
     Forkolator.post("/repos/#{autosave_repo_id}/commits", {:message => message})
   end
 
-  def check_for_uri
+  def update_status
     response = Forkolator.get_json("/repos/#{identifier}")
-    update_attributes(:uri => response["uri"]) if response["uri"]
+    update_attributes(:uri => response["uri"]) unless response["uri"] == uri
+    self.status = response["status"]
   end
 
   def old_code(sha)

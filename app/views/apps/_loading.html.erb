@@ -14,7 +14,7 @@ function spin_until_loaded(redir) {
     { 
       method:'get',
       onSuccess: function(transport) {
-        if (transport.responseJSON.app.uri) {
+        if (transport.responseJSON.app.status == "deployed") {
           stop_spinning();
           if (redirect) {
             do_redirect();
