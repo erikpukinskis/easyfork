@@ -1,6 +1,5 @@
 <h1>Sign in</h1>
 
-<%= current_user.inspect %>
 <% form_for @user_session, :url => user_session_path do |f| %>
   <%= f.error_messages %>
   <%= f.label :login, "Username" %><br />
