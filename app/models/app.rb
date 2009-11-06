@@ -21,7 +21,7 @@ class App < ActiveRecord::Base
 
   def App.basic_find(login, name)
     user = User.find_by_login(login)
-    App.find(:first, :conditions => ["owner_id = ? AND name = ?", user.id, name])
+    App.find(:first, :conditions => ["owner_id = ? AND name = ?", user[:id], name])
   end
 
   def before_create
