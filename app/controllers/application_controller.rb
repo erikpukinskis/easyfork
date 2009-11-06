@@ -53,10 +53,9 @@ class ApplicationController < ActionController::Base
     end
     
     def require_user
-      puts "current user: " << current_user.inspect
       unless current_user
         store_location
-        flash[:notice] = "You must be logged in to access this page"
+        flash[:notice] = "You must be logged in to access this page" << current_user.inspect
         redirect_to new_user_session_url
         return false
       end
