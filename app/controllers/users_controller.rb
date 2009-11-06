@@ -17,7 +17,7 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-    @app = App.find_by_id(session[:orphan_app_id]) or App.new
+    @app = (App.find_by_id(session[:orphan_app_id]) or App.new)
   end
   
   def create
