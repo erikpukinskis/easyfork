@@ -1,4 +1,7 @@
-<h1><%= @user.login %></h1>
+<h1>
+  <img src="<%= gravatar_url(@user) %>" width="80" height="80">
+  <%= @user.login %>
+</h1>
 
 <h2>Apps</h2>
 
