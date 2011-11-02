@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
 
   helper_method :current_user_session, :current_user, :signed_in?, :app_path, :app_link
-  filter_parameter_logging :password, :password_confirmation
 
   private
     def app_path(app, action = nil)

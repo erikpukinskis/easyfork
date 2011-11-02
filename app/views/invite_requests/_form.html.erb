@@ -3,8 +3,8 @@
 <p>Give us your email address and a quick reason why you want to use 
 Forkolator and we'll get you an invite.</p>
 
-<% form_for(@invite_request) do |f| %>
-  <%= f.error_messages %>
+<% form_for @invite_request do |f| %>
+  <%= errors @invite_request %>
 
   <p>
     <%= f.label :email %><br />
