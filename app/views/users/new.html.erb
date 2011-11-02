@@ -14,11 +14,11 @@
 
 <h1><%= "Get in on this" or "While things start up, why not..." %></h1>
 
-<% form_for @user, :url => '/join' do |f| %>
-  <%= error_messages_for :object => [@user, @app] %>
+<%= form_for @user, :url => '/join' do |f| %>
+  <%= errors @user, @app %>
 
   <% if app %>
-  <% fields_for @app do |a| %>
+  <%= fields_for @app do |a| %>
     <p><%= a.label :name, "Give your app a name" %><br />
     <%= a.text_field :name, {} %></p>
   <% end %>

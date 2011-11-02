@@ -4,6 +4,7 @@ gem 'rails'
 gem 'sqlite3'
 gem 'json'
 gem 'authlogic'
+gem 'haml'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -1,6 +1,6 @@
 <h1>Sign in</h1>
 
-<% form_for @user_session, :url => user_session_path do |f| %>
+<%= form_for @user_session, :url => user_session_path do |f| %>
   <%= errors @user_session %>
   <%= f.label :login, "Username" %><br />
   <%= f.text_field :login %><br />

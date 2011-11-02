@@ -34,7 +34,14 @@ body {
   text-align: center;
   width: 500px;
   border: 1px solid red;
-  background-color: pink;
   margin: 2em auto;
   padding: 5px 10px;
+}
+
+.field_with_errors {
+  display: inline;
+}
+
+.field_with_errors input {
+  background-color: pink;
 }

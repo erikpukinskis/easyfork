@@ -7,7 +7,7 @@
   <div id="main_column">
   <% form_for(@app) do |f| %>
 
-    <%= f.error_messages %>
+    <%= errors @app %>
 
     <div id="changes" class="off"></div>
     <div id="editor_container" class="<%= @app.new_record? ? 'without' : 'with' %>_slider">
