@@ -1,11 +1,22 @@
 <% content_for :stylesheets do %><%= stylesheet_link_tag 'edit_app' %><% end %>
-<% content_for :javascripts do %><%= javascript_include_tag 'edit_area/edit_area_loader' %><% end %>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'ace/ace' %>
+  <%= javascript_include_tag 'ace/theme-twilight' %>
+  <%= javascript_include_tag 'ace/mode-ruby' %>
+<% end %>
 
+<script>
+window.onload = function() {
+    var editor = ace.edit("app_code");
+    
+    var Mode = require("ace/mode/ruby").Mode;
+    editor.getSession().setMode(new Mode());
+};
+</script>
 
+<div id="main_column">
 
-
-  <div id="main_column">
-  <% form_for(@app) do |f| %>
+  <%= form_for(@app) do |f| %>
 
     <%= errors @app %>
 
@@ -20,7 +31,7 @@
         </div>
       <% end %>
 
-      <%= f.text_area :code %>
+      <pre id="app_code"><%= @app.code %></pre>
     </div>
 
     <% if @app.new_record? %>
@@ -28,223 +39,21 @@
     <% end %>
 
   <% end %>
-  </div>
+</div>
 
-  <div id="sidebar">
+<div id="sidebar">
 
-    <% unless @app.new_record? %>
-      <%= render :partial => "boxes/app_info" if signed_in? or @app.name %>
+  <% unless @app.new_record? %>
+    <%= render :partial => "boxes/app_info" if signed_in? or @app.name %>
 
-      <p>Deployed to <a href="<%= @app.uri %>"><%= @app.uri %></a></p>
+    <p>Deployed to <a href="<%= @app.uri %>"><%= @app.uri %></a></p>
 
-      <% if @app.owner == current_user %>
-        <p><a class="button" href="<%= app_deploy_path(@app) %>" %>Deploy</a></p>
-      <% else %>
-        <p><a class="button" href="<%= app_fork_path(@app) %>" %>Fork this app</a></p>
-      <% end %>     
- 
-    <% end %>
+    <% if @app.owner == current_user %>
+      <p><a class="button" href="<%= app_deploy_path(@app) %>" %>Deploy</a></p>
+    <% else %>
+      <p><a class="button" href="<%= app_fork_path(@app) %>" %>Fork this app</a></p>
+    <% end %>     
 
-  </div>
+  <% end %>
 
-
-<script language="Javascript" type="text/javascript">
-	// initialisation
-	editAreaLoader.init({
-		id: "app_code"	// id of the textarea to transform		
-		,start_highlight: true	// if start with highlight
-		,allow_resize: "no"
-    ,toolbar: ""
-		,allow_toggle: false
-		,language: "en"
-		,syntax: "ruby"	
-    ,replace_tab_by_spaces: 2
-    ,keypress_callback: 'handle_change'
-    ,EA_init_callback: 'remember_code'
-	});
-
-  var last_saved_code = null;
-  function remember_code(id) {
-    last_saved_code = editAreaLoader.getValue('app_code')
-  }
-
-  function handle_change(id) {
-    if (!editing) return;
-    schedule_or_delay_a_save();
-  }
-
-  var save_timeout = null;
-  function schedule_or_delay_a_save() {
-    if (save_timeout != null) {
-      clearTimeout(save_timeout);
-    }
-
-    save_timeout = setTimeout(autosave, 2000);
-  }
-
-  var saving = false;
-  var original_code = document.getElementById("app_code").value;
-  function autosave() {
-    if (saving) {
-      schedule_or_delay_a_save();
-    } else {
-      if (editAreaLoader.getValue('app_code') != last_saved_code) {
-        saving = true;
-        make_save_request();
-        last_saved_code = editAreaLoader.getValue('app_code');
-      }
-      clearTimeout(save_timeout);
-    }
-  }
-
-  function make_save_request() {
-     new Ajax.Request('<%= app_path(@app, "files/app.rb") %>', 
-      { 
-        method:'put',
-        parameters: 
-          {
-            "authenticity_token":"<%= form_authenticity_token %>",
-            "app_code":editAreaLoader.getValue('app_code')
-          },
-        onSuccess: function(transport) {
-          saving = false;
-          set_num_changes(transport.responseJSON.changes_since_last_full_commit);
-          set_stars(transport.responseJSON.commits);
-          set_slider_size(transport.responseJSON.commit_count-1);
-        },
-        onFailure: function() { alert("fail!"); }
-      });   
-  }
-
-  var loading = false;
-  var reload_when_finished = false;
-  var commit_index_to_load;
-  var revisions = new Array();
-  function load_commit(index) {
-    if (loading) {
-      reload_when_finished = true;
-      commit_index_to_load = index;
-    } else {
-      if (revisions[index]) {
-        set_code(revisions[index]);
-        return;
-      }
-      loading = true;
-      new Ajax.Request('<%= app_commits_path(@app) %>/' + index, 
-        { 
-          method:'get',
-          onSuccess: function(transport) {
-            loading = false;
-            revisions[transport.responseJSON.index] = transport.responseJSON.text
-            set_code(transport.responseJSON.text);
-            if (reload_when_finished) {
-              load_commit(commit_index_to_load);
-              reload_when_finished = false;
-            }
-          },
-          onFailure: function() { alert("fail!"); }
-        }); 
-    }
-  }
-
-  function set_code(code) {
-    editAreaLoader.setValue('app_code', '');
-    editAreaLoader.setValue('app_code', code);
-    original_code = code
-    remember_code();
-  }
-
-  var num_changes;
-  var changes;
-  function set_num_changes(num) {
-    num_changes = num;
-    changes = (num > 0)
-    label = (num > 1) ? "changes" : "change"
-    $j("#commit_slider").toggleClass('with_changes', changes);
-    $j("#commit_slider").toggleClass('without_changes', !changes);
-    $j("#changes").html(num + " " + label + "!");
-    $j("#changes").toggleClass('off', !changes);
-    $j("#save_button").toggleClass('off', !changes);
-  }
-
-  function set_slider_size(num) {
-    $j("#commit_slider").slider('option', 'max', num);
-  }
-
-  function save() {
-    var msg = prompt("What are you saving?");
-    new Ajax.Request('<%= app_commits_path(@app) %>', 
-    { 
-      method:'post',
-      parameters: {
-        'message': msg,
-        'authenticity_token':'<%= form_authenticity_token %>'
-      },
-      onSuccess: function(transport) {
-        set_num_changes(0);
-        set_stars(transport.responseJSON.commits);
-      },
-      onFailure: function() { alert("fail!"); }
-    });   
-  }
-
-  function set_stars(commits) {
-    $j("#commit_stars").html('');
-    for(var i=0; i<commits.length; i++) {
-      if (commits[i].full) {
-        width = changes ? 438.0 : 495.0;
-        left = i / (commits.length-1) * width - 3;
-        $j("#commit_stars").html($j("#commit_stars").html() 
-          + '<img src="/images/star.png" onclick="" style="position: relative; left: ' 
-          + left + 'px; top: -3px; margin-right: -16px;" alt="' + commits[i]['message'] + '" '
-          + " onmouseover=\"show_commit('" + commits[i]['message'] + "', '" + left + "');\" "
-          + " onmouseout=\"hide_commit();\">");
-      }
-    }
-  }
-
-  function show_commit(message, left) {
-    $("commit_bubble").style.left = (left-5) + 'px';
-    $j("#commit_bubble").html(message);
-    $("commit_bubble").style.display = "block";
-  }
-
-  function hide_commit() {
-    $("commit_bubble").style.display = "none";
-  }
-
-  function initialize_slider() {
-    new Ajax.Request('<%= app_commits_path(@app) %>', 
-    { 
-      method:'get',
-      onSuccess: function(transport) {
-        set_num_changes(transport.responseJSON.changes_since_last_full_commit);
-        set_slider_size(transport.responseJSON.total_changes-1);
-        set_stars(transport.responseJSON.commits);
-      },
-      onFailure: function() { alert("fail!"); }
-    });
-  }
-
-<% unless @app.new_record? %>
-
-  $j(document).ready(function(){
-    $j("#commit_slider").slider(
-      {
-        min: 0, 
-        max: <%= @app.commits.length-1 %>,
-        value: <%= @app.commits.length-1 %>,
-        slide: function(event, ui) {
-          load_commit(ui.value);
-        }
-      }
-    );
-  });
-
-  initialize_slider();
-<% end %>
-
-  var editing = <%= @app.owner == current_user %>;
-
-</script>
-
+</div>
