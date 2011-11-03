@@ -1,18 +1,37 @@
 <% content_for :stylesheets do %><%= stylesheet_link_tag 'edit_app' %><% end %>
 <% content_for :javascripts do %>
+  <%= javascript_include_tag 'editor' %>
   <%= javascript_include_tag 'ace/ace' %>
   <%= javascript_include_tag 'ace/theme-twilight' %>
   <%= javascript_include_tag 'ace/mode-ruby' %>
 <% end %>
 
-<script>
-window.onload = function() {
-    var editor = ace.edit("app_code");
-    
-    var Mode = require("ace/mode/ruby").Mode;
-    editor.getSession().setMode(new Mode());
-};
+<script language="Javascript" type="text/javascript">
+ 
+<% unless @app.new_record? %>
+
+  $j(document).ready(function(){
+    $j("#commit_slider").slider(
+      {
+        min: 0, 
+        max: <%= @app.commits.length-1 %>,
+        value: <%= @app.commits.length-1 %>,
+        slide: function(event, ui) {
+          load_commit(ui.value);
+        }
+      }
+    );
+  });
+
+  initialize_slider();
+<% end %>
+
+  var editing = <%= @app.owner == current_user %>;
+
 </script>
+
+
+
 
 <div id="main_column">
 
@@ -57,3 +76,4 @@ window.onload = function() {
   <% end %>
 
 </div>
+
