@@ -67,6 +67,7 @@ class AppsController < ApplicationController
     if signed_in?
       params[:app][:owner_id] = current_user.id
     end
+
     @app = App.new(params[:app])
     respond_to do |format|
       if @app.save

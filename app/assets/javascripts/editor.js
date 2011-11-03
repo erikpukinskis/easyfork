@@ -13,7 +13,7 @@ var changes;
 
 window.onload = function() {
   editor = ace.edit("app_code");
-  original_code = getCode();
+  original_code = get_code();
   
   var Mode = require("ace/mode/ruby").Mode;
   editor.getSession().setMode(new Mode());
@@ -21,6 +21,10 @@ window.onload = function() {
 
 function remember_code(id) {
   last_saved_code = get_code();
+}
+
+function store_code_in_form() {
+  $("#hidden_app_code").attr("value", get_code());
 }
 
 function handle_change(id) {

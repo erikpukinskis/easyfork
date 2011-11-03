@@ -35,8 +35,8 @@
 
 <div id="main_column">
 
-  <%= form_for(@app) do |f| %>
-
+  <%= form_for @app, :html => {:onsubmit => "store_code_in_form()"} do |f| %>
+    <%= f.hidden_field :code, :id => "hidden_app_code" %>
     <%= errors @app %>
 
     <div id="changes" class="off"></div>

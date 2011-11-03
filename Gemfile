@@ -1,10 +1,11 @@
-source 'http://rubygems.org'
+source :rubygems
 
 gem 'rails'
 gem 'sqlite3'
 gem 'json'
 gem 'authlogic'
 gem 'haml'
+gem 'rest-client'
 
 # Gems used only for assets and not required
 # in production environments by default.
